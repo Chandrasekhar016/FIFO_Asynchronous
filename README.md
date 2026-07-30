@@ -26,6 +26,27 @@ An **Asynchronous FIFO (First-In, First-Out)** is a memory buffer used to safely
 - SystemVerilog
 
 
+## FIFO Operation
+
+Time resolution is 1 ps
+WRITE : time=140000 data=24
+WRITE : time=160000 data=81
+WRITE : time=180000 data=09
+WRITE : time=200000 data=63
+WRITE : time=220000 data=0d
+WRITE : time=240000 data=8d
+WRITE : time=260000 data=65
+WRITE : time=280000 data=12
+PASS  time=526000 data=24
+PASS  time=596000 data=81
+PASS  time=666000 data=09
+PASS  time=736000 data=63
+PASS  time=806000 data=0d
+PASS  time=876000 data=8d
+PASS  time=946000 data=65
+
+
+
 
   ## Verification Flow
 
