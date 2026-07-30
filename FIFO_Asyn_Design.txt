@@ -1,0 +1,277 @@
+`timescale 1ns / 1ps
+module ff_synchronizer #(parameter PTR_WIDTH = 3)
+(
+    input clk,
+    input rst_n,
+    input [PTR_WIDTH:0] d_in,
+    output reg [PTR_WIDTH:0] d_out
+);
+
+reg [PTR_WIDTH:0] q1;
+
+always @(posedge clk or negedge rst_n)
+begin
+    if(!rst_n)
+    begin
+        q1    <= 0;
+        d_out <= 0;
+    end
+    else
+    begin
+        q1    <= d_in;
+        d_out <= q1;
+    end
+end
+
+endmodule
+
+
+
+module wptr_handler
+#(
+parameter PTR_WIDTH = 3
+)
+(
+input wclk,
+input wrst_n,
+input w_en,
+input [PTR_WIDTH:0] g_rptr_sync,
+
+output reg wfull,
+output [PTR_WIDTH:0] b_wptr,
+output [PTR_WIDTH:0] g_wptr
+);
+
+reg [PTR_WIDTH:0] b_wptr_reg;
+reg [PTR_WIDTH:0] g_wptr_reg;
+
+wire [PTR_WIDTH:0] b_wptr_next;
+wire [PTR_WIDTH:0] g_wptr_next;
+
+assign b_wptr = b_wptr_reg;
+assign g_wptr = g_wptr_reg;
+
+assign b_wptr_next = b_wptr_reg + (w_en & ~wfull);
+
+assign g_wptr_next = (b_wptr_next>>1)^b_wptr_next;
+
+wire wfull_val;
+
+assign wfull_val =
+(g_wptr_next ==
+{~g_rptr_sync[PTR_WIDTH:PTR_WIDTH-1],
+g_rptr_sync[PTR_WIDTH-2:0]});
+
+always @(posedge wclk or negedge wrst_n)
+begin
+    if(!wrst_n)
+    begin
+        b_wptr_reg <= 0;
+        g_wptr_reg <= 0;
+        wfull <= 0;
+    end
+    else
+    begin
+        b_wptr_reg <= b_wptr_next;
+        g_wptr_reg <= g_wptr_next;
+        wfull <= wfull_val;
+    end
+end
+
+endmodule
+
+
+module rptr_handler
+#(
+parameter PTR_WIDTH = 3
+)
+(
+input rclk,
+input rrst_n,
+input r_en,
+input [PTR_WIDTH:0] g_wptr_sync,
+
+output reg rempty,
+output [PTR_WIDTH:0] b_rptr,
+output [PTR_WIDTH:0] g_rptr
+);
+
+reg [PTR_WIDTH:0] b_rptr_reg;
+reg [PTR_WIDTH:0] g_rptr_reg;
+
+wire [PTR_WIDTH:0] b_rptr_next;
+wire [PTR_WIDTH:0] g_rptr_next;
+
+assign b_rptr = b_rptr_reg;
+assign g_rptr = g_rptr_reg;
+
+assign b_rptr_next = b_rptr_reg + (r_en & ~rempty);
+
+assign g_rptr_next = (b_rptr_next>>1)^b_rptr_next;
+
+wire rempty_val;
+
+assign rempty_val = (g_wptr_sync == g_rptr_next);
+
+always @(posedge rclk or negedge rrst_n)
+begin
+    if(!rrst_n)
+    begin
+        b_rptr_reg <= 0;
+        g_rptr_reg <= 0;
+        rempty <= 1'b1;
+    end
+    else
+    begin
+        b_rptr_reg <= b_rptr_next;
+        g_rptr_reg <= g_rptr_next;
+        rempty <= rempty_val;
+    end
+end
+
+endmodule
+
+
+
+module fifo_mem
+#(
+parameter DATA_WIDTH = 8,
+parameter ADDR_WIDTH = 3
+)
+(
+input wclk,
+input w_en,
+input wfull,
+
+input rclk,
+input r_en,
+input rempty,
+
+input [ADDR_WIDTH:0] b_wptr,
+input [ADDR_WIDTH:0] b_rptr,
+
+input [DATA_WIDTH-1:0] data_in,
+
+output reg [DATA_WIDTH-1:0] data_out
+);
+
+reg [DATA_WIDTH-1:0] mem[(1<<ADDR_WIDTH)-1:0];
+
+wire wclken;
+wire rclken;
+
+assign wclken = w_en & ~wfull;
+assign rclken = r_en & ~rempty;
+
+always @(posedge wclk)
+begin
+    if(wclken)
+        mem[b_wptr[ADDR_WIDTH-1:0]] <= data_in;
+end
+
+always @(posedge rclk)
+begin
+    if(rclken)
+        data_out <= mem[b_rptr[ADDR_WIDTH-1:0]];
+end
+
+endmodule
+
+
+
+module asynchronous_fifo
+#(
+parameter DATA_WIDTH = 8,
+parameter ADDR_WIDTH = 3
+)
+(
+input wclk,
+input wrst_n,
+input w_en,
+
+input rclk,
+input rrst_n,
+input r_en,
+
+input [DATA_WIDTH-1:0] data_in,
+
+output [DATA_WIDTH-1:0] data_out,
+
+output full,
+output empty
+);
+
+wire [ADDR_WIDTH:0] b_wptr;
+wire [ADDR_WIDTH:0] g_wptr;
+
+wire [ADDR_WIDTH:0] b_rptr;
+wire [ADDR_WIDTH:0] g_rptr;
+
+wire [ADDR_WIDTH:0] g_wptr_sync;
+wire [ADDR_WIDTH:0] g_rptr_sync;
+
+ff_synchronizer #(.PTR_WIDTH(ADDR_WIDTH))
+sync_rptr
+(
+.clk(wclk),
+.rst_n(wrst_n),
+.d_in(g_rptr),
+.d_out(g_rptr_sync)
+);
+
+ff_synchronizer #(.PTR_WIDTH(ADDR_WIDTH))
+sync_wptr
+(
+.clk(rclk),
+.rst_n(rrst_n),
+.d_in(g_wptr),
+.d_out(g_wptr_sync)
+);
+
+wptr_handler #(.PTR_WIDTH(ADDR_WIDTH))
+WPTR
+(
+.wclk(wclk),
+.wrst_n(wrst_n),
+.w_en(w_en),
+.g_rptr_sync(g_rptr_sync),
+.wfull(full),
+.b_wptr(b_wptr),
+.g_wptr(g_wptr)
+);
+
+rptr_handler #(.PTR_WIDTH(ADDR_WIDTH))
+RPTR
+(
+.rclk(rclk),
+.rrst_n(rrst_n),
+.r_en(r_en),
+.g_wptr_sync(g_wptr_sync),
+.rempty(empty),
+.b_rptr(b_rptr),
+.g_rptr(g_rptr)
+);
+
+fifo_mem
+#(
+.DATA_WIDTH(DATA_WIDTH),
+.ADDR_WIDTH(ADDR_WIDTH)
+)
+MEM
+(
+.wclk(wclk),
+.w_en(w_en),
+.wfull(full),
+
+.rclk(rclk),
+.r_en(r_en),
+.rempty(empty),
+
+.b_wptr(b_wptr),
+.b_rptr(b_rptr),
+
+.data_in(data_in),
+.data_out(data_out)
+);
+
+endmodule

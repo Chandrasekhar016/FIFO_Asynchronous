@@ -1,0 +1,787 @@
+$date
+   Thu Jul 30 17:58:55 2026
+$end
+
+$version
+  2025.2
+  $dumpfile ("dump.vcd") 
+$end
+
+$timescale
+  1ps
+$end
+
+$scope module fifo_asyn_tb $end
+$var wire 8 ! data_out [7:0] $end
+$var wire 1 " full $end
+$var wire 1 # empty $end
+$var reg 8 $ data_in [7:0] $end
+$var reg 1 % w_en $end
+$var reg 1 & wclk $end
+$var reg 1 ' wrst_n $end
+$var reg 1 ( r_en $end
+$var reg 1 ) rclk $end
+$var reg 1 * rrst_n $end
+$var reg 8 + wdata [7:0] $end
+$scope module as_fifo $end
+$var wire 1 , wclk $end
+$var wire 1 - wrst_n $end
+$var wire 1 . rclk $end
+$var wire 1 / rrst_n $end
+$var wire 1 0 w_en $end
+$var wire 1 1 r_en $end
+$var wire 8 2 data_in [7:0] $end
+$var wire 8 ! data_out [7:0] $end
+$var wire 1 " full $end
+$var wire 1 # empty $end
+$var wire 4 3 g_wptr_sync [3:0] $end
+$var wire 4 4 g_rptr_sync [3:0] $end
+$var wire 4 5 b_wptr [3:0] $end
+$var wire 4 6 b_rptr [3:0] $end
+$var wire 4 7 g_wptr [3:0] $end
+$var wire 4 8 g_rptr [3:0] $end
+$var wire 3 9 waddr [2:0] $end
+$var wire 3 : raddr [2:0] $end
+$scope module sync_wptr $end
+$var wire 1 . clk $end
+$var wire 1 / rst_n $end
+$var wire 4 7 d_in [3:0] $end
+$var reg 4 ; d_out [3:0] $end
+$var reg 4 < q1 [3:0] $end
+$upscope $end
+$scope module sync_rptr $end
+$var wire 1 , clk $end
+$var wire 1 - rst_n $end
+$var wire 4 8 d_in [3:0] $end
+$var reg 4 = d_out [3:0] $end
+$var reg 4 > q1 [3:0] $end
+$upscope $end
+$scope module wptr_h $end
+$var wire 1 , wclk $end
+$var wire 1 - wrst_n $end
+$var wire 1 0 w_en $end
+$var wire 4 4 g_rptr_sync [3:0] $end
+$var reg 4 ? b_wptr [3:0] $end
+$var reg 4 @ g_wptr [3:0] $end
+$var reg 1 A full $end
+$var wire 4 B b_wptr_next [3:0] $end
+$var wire 4 C g_wptr_next [3:0] $end
+$var reg 1 D wrap_around $end
+$var wire 1 E wfull $end
+$upscope $end
+$scope module rptr_h $end
+$var wire 1 . rclk $end
+$var wire 1 / rrst_n $end
+$var wire 1 1 r_en $end
+$var wire 4 3 g_wptr_sync [3:0] $end
+$var reg 4 F b_rptr [3:0] $end
+$var reg 4 G g_rptr [3:0] $end
+$var reg 1 H empty $end
+$var wire 1 I rempty $end
+$var wire 4 J b_rptr_next [3:0] $end
+$var wire 4 K g_rptr_next [3:0] $end
+$upscope $end
+$scope module fifom $end
+$var wire 1 , wclk $end
+$var wire 1 0 w_en $end
+$var wire 1 . rclk $end
+$var wire 1 1 r_en $end
+$var wire 4 5 b_wptr [3:0] $end
+$var wire 4 6 b_rptr [3:0] $end
+$var wire 8 2 data_in [7:0] $end
+$var wire 1 " full $end
+$var wire 1 # empty $end
+$var reg 8 L data_out [7:0] $end
+$upscope $end
+$upscope $end
+$scope begin Block33_14 $end
+$var reg 32 M i [31:0] $end
+$upscope $end
+$scope begin Block59_16 $end
+$var reg 32 N i [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+
+#0
+$dumpvars
+b0 !
+0"
+1#
+b0 $
+0%
+0&
+0'
+0(
+0)
+0*
+bx +
+0,
+0-
+0.
+0/
+00
+01
+b0 2
+b0 3
+b0 4
+b0 5
+b0 6
+b0 7
+b0 8
+bz 9
+bz :
+b0 ;
+b0 <
+b0 =
+b0 >
+b0 ?
+b0 @
+0A
+b0 B
+b0 C
+xD
+0E
+b0 F
+b0 G
+1H
+1I
+b0 J
+b0 K
+b0 L
+b0 M
+b0 N
+$end
+
+#10000
+1&
+1,
+
+#20000
+0&
+0,
+
+#30000
+1&
+1,
+
+#35000
+1)
+1.
+
+#40000
+0&
+0,
+
+#50000
+1&
+1,
+
+#60000
+0&
+0,
+
+#70000
+1&
+0)
+1,
+0.
+
+#80000
+0&
+0,
+
+#90000
+1&
+1,
+
+#100000
+0&
+0,
+
+#105000
+1)
+1.
+
+#110000
+1&
+1,
+
+#120000
+0&
+0,
+
+#130000
+1&
+1,
+
+#140000
+0&
+0)
+0,
+0.
+
+#150000
+1&
+1,
+
+#160000
+0&
+0,
+
+#170000
+1&
+1,
+
+#175000
+1)
+1.
+
+#180000
+0&
+0,
+
+#190000
+1&
+1'
+1,
+1-
+
+#200000
+0&
+0,
+
+#210000
+1&
+0)
+1,
+0.
+
+#220000
+0&
+0,
+
+#230000
+b11100011 $
+1%
+1&
+1,
+10
+b11100011 2
+b1 B
+b1 C
+
+#240000
+0&
+0,
+
+#245000
+1)
+1.
+
+#250000
+b1011 $
+1%
+1&
+1,
+b1011 2
+b1 5
+b1 7
+b1 ?
+b1 @
+b10 B
+b11 C
+b1 M
+
+#260000
+0&
+0,
+
+#270000
+b11010100 $
+1%
+1&
+1,
+b11010100 2
+b10 5
+b11 7
+b10 ?
+b11 @
+b11 B
+b10 C
+b10 M
+
+#280000
+0&
+0)
+0,
+0.
+
+#290000
+b11110110 $
+1%
+1&
+1,
+b11110110 2
+b11 5
+b10 7
+b11 ?
+b10 @
+b100 B
+b110 C
+b11 M
+
+#300000
+0&
+0,
+
+#310000
+b11000101 $
+1%
+1&
+1,
+b11000101 2
+b100 5
+b110 7
+b100 ?
+b110 @
+b101 B
+b111 C
+b100 M
+
+#315000
+1)
+1.
+
+#320000
+0&
+0,
+
+#330000
+b11000001 $
+1%
+1&
+1,
+b11000001 2
+b101 5
+b111 7
+b101 ?
+b111 @
+b110 B
+b101 C
+b101 M
+
+#340000
+0&
+0,
+
+#350000
+b1000011 $
+1%
+1&
+0)
+1,
+0.
+b1000011 2
+b110 5
+b101 7
+b110 ?
+b101 @
+b111 B
+b100 C
+b110 M
+
+#360000
+0&
+0,
+
+#370000
+b10101000 $
+1%
+1&
+1,
+b10101000 2
+b111 5
+b100 7
+b111 ?
+b100 @
+b1000 B
+b1100 C
+1E
+b111 M
+
+#380000
+0&
+0,
+
+#385000
+1)
+1.
+
+#390000
+1"
+b11001101 $
+1%
+1&
+1,
+b11001101 2
+b1000 5
+b1100 7
+b1000 ?
+b1100 @
+1A
+b1000 M
+
+#400000
+0&
+0,
+
+#410000
+1%
+1&
+1,
+b1001 M
+
+#420000
+0&
+0)
+0,
+0.
+
+#430000
+1%
+1&
+1,
+b1010 M
+
+#440000
+0&
+0,
+
+#450000
+1%
+1&
+1,
+b1011 M
+
+#455000
+1)
+1.
+
+#460000
+0&
+0,
+
+#470000
+1%
+1&
+1,
+b1100 M
+
+#480000
+0&
+0,
+
+#490000
+1%
+1&
+0)
+1,
+0.
+b1101 M
+
+#500000
+0&
+0,
+
+#510000
+1%
+1&
+1,
+b1110 M
+
+#520000
+0&
+0,
+
+#525000
+1)
+1.
+
+#530000
+1%
+1&
+1,
+b1111 M
+
+#540000
+0&
+0,
+
+#550000
+1%
+1&
+1,
+b10000 M
+
+#560000
+0&
+0)
+0,
+0.
+
+#570000
+1%
+1&
+1,
+b10001 M
+
+#580000
+0&
+0,
+
+#590000
+1%
+1&
+1,
+b10010 M
+
+#595000
+1)
+1.
+
+#600000
+0&
+0,
+
+#610000
+1%
+1&
+1,
+b10011 M
+
+#620000
+0&
+0,
+
+#630000
+1%
+1&
+0)
+1,
+0.
+b10100 M
+
+#640000
+0&
+0,
+
+#650000
+1%
+1&
+1,
+b10101 M
+
+#660000
+0&
+0,
+
+#665000
+1)
+1.
+
+#670000
+1%
+1&
+1,
+b10110 M
+
+#680000
+0&
+0,
+
+#690000
+1%
+1&
+1,
+b10111 M
+
+#700000
+0&
+0)
+0,
+0.
+
+#710000
+1%
+1&
+1,
+b11000 M
+
+#720000
+0&
+0,
+
+#730000
+1%
+1&
+1,
+b11001 M
+
+#735000
+1)
+1.
+
+#740000
+0&
+0,
+
+#750000
+1%
+1&
+1,
+b11010 M
+
+#760000
+0&
+0,
+
+#770000
+1%
+1&
+0)
+1,
+0.
+b11011 M
+
+#780000
+0&
+0,
+
+#790000
+1%
+1&
+1,
+b11100 M
+
+#800000
+0&
+0,
+
+#805000
+1)
+1.
+
+#810000
+1%
+1&
+1,
+b11101 M
+
+#820000
+0&
+0,
+
+#830000
+0%
+1&
+1,
+00
+b11110 M
+
+#840000
+0&
+0)
+0,
+0.
+
+#850000
+1&
+1,
+
+#860000
+0&
+0,
+
+#870000
+1&
+1,
+
+#875000
+1)
+1.
+
+#880000
+1%
+0&
+0,
+10
+b0 M
+
+#890000
+1%
+1&
+1,
+b1 M
+
+#900000
+0&
+0,
+
+#910000
+1%
+1&
+0)
+1,
+0.
+b10 M
+
+#920000
+0&
+0,
+
+#930000
+1%
+1&
+1,
+b11 M
+
+#940000
+0&
+0,
+
+#945000
+1)
+1.
+
+#950000
+1%
+1&
+1,
+b100 M
+
+#960000
+0&
+0,
+
+#970000
+1%
+1&
+1,
+b101 M
+
+#980000
+0&
+0)
+0,
+0.
+
+#990000
+1%
+1&
+1,
+b110 M
+
+#1000000
+0&
+0,
